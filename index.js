@@ -50,6 +50,9 @@ function start() {
       if (answer.options === "View Employees") {
         viewEmployees();
       }
+      if (answer.options === "View Department") {
+        viewDepartment();
+      }
       if (answer.options === "View Role") {
         viewRole();
       }
@@ -181,7 +184,21 @@ function addRole() {
 function viewEmployees() {
   connection.query("SELECT * FROM employee", function (err, results) {
     if (err) throw err;
+    console.log("                              ");
+    console.log("------------------------------");
     console.table(results);
+    console.log("                              ");
+  });
+  start();
+}
+
+function viewDepartment() {
+  connection.query("SELECT * FROM department", function (err, results) {
+    if (err) throw err;
+    console.log("                              ");
+    console.log("------------------------------");
+    console.table(results);
+    console.log("                              ");
   });
   start();
 }
@@ -189,7 +206,10 @@ function viewEmployees() {
 function viewRole() {
   connection.query("SELECT * FROM role", function (err, results) {
     if (err) throw err;
+    console.log("                              ");
+    console.log("------------------------------");
     console.table(results);
+    console.log("                              ");
   });
   start();
 }
