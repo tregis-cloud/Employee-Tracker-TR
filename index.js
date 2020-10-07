@@ -42,8 +42,15 @@ function start() {
       if (answer.options === "Add Department") {
         addDepartment();
       }
+      if (answer.options === "Add Role") {
+        addRole();
+      }
+      if (answer.options === "View Employees") {
+        viewEmployees();
+      }
     });
 }
+
 function addEmployee() {
   connection.query("SELECT title, id FROM role", function (err, results) {
     if (err) throw err;
@@ -98,8 +105,9 @@ function addEmployee() {
       });
   });
 }
+
 function addDepartment() {
-  console.log("You've reached Department");
+  // console.log("You've reached Department");
   inquirer
     .prompt([
       {
@@ -120,4 +128,67 @@ function addDepartment() {
         }
       );
     });
+}
+
+function addRole() {
+  console.log("1", "You've reached Role");
+  connection.query("SELECT id, name FROM department", function (err, results) {
+    if (err) throw err;
+
+    console.log("2", results);
+
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "title",
+          message: "What role would you like to add? ",
+        },
+        {
+          type: "input",
+          name: "salary",
+          message: "What's the salary for this role ",
+        },
+        {
+          type: "rawlist",
+          name: "deptID",
+          choices: function () {
+            const deptIDArray = [];
+            for (let i = 0; i < results.length; i++) {
+              const deptID = {
+                name: result[i].name,
+                value: result[i].id,
+              };
+              deptIDArray.push(deptID);
+            }
+            console.log("3", deptIDArray);
+            return deptIDArray;
+          },
+          message: "Please select the employee's department.",
+        },
+      ])
+      .then(function (answer) {
+        console.log("4", answer);
+        connection.query(
+          "INSERT INTO role SET ?",
+          {
+            title: answer.title,
+            salary: answer.salary,
+            department_id: answer.deptID,
+          },
+          function (err) {
+            if (err) throw err;
+            console.log("C", "Employee role was successfully created!");
+            start();
+          }
+        );
+      });
+  });
+}
+
+function viewEmployees() {
+  connection.query("SELECT * FROM employee", function (err, results) {
+    if (err) throw err;
+    console.table(results);
+  });
 }
