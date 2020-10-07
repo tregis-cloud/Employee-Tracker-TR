@@ -89,7 +89,7 @@ function addEmployee() {
               };
               rolesArray.push(roleID);
             }
-            // console.log("B", rolesArray);
+
             return rolesArray;
           },
           message: "Please select the employee's role.",
@@ -199,13 +199,8 @@ function updateEmployeeRole() {
     .prompt([
       {
         type: "input",
-        name: "firstName",
-        message: "What's the employee's first name?",
-      },
-      {
-        type: "input",
-        name: "lasttName",
-        message: "What's the employee's last name?",
+        name: "id",
+        message: "What's the employee's id?",
       },
       {
         type: "input",
@@ -215,21 +210,14 @@ function updateEmployeeRole() {
     ])
     .then(function (answer) {
       // console.log("ZZ", answer);
-      let first_name = answer.firstName;
-      let last_name = answer.lasttName;
+      let id = answer.id;
       let role_id = answer.roleId;
-      let manager_id = answer.managerID;
-      let query =
-        "INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUE(?,?,?,?)";
-      connection.query(
-        query,
-        [first_name, last_name, role_id, manager_id],
-        function (err) {
-          if (err) throw err;
-          console.log("C", "Employee role was successfully updated!");
-          start();
-        }
-      );
+      let query = "UPDATE employee SET role_id =? WHERE id = ?";
+      connection.query(query, [id, role_id], function (err) {
+        if (err) throw err;
+        console.log("C", "Employee role was successfully updated!");
+        start();
+      });
     });
 }
 
