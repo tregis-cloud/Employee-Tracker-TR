@@ -89,14 +89,14 @@ function addEmployee() {
               };
               rolesArray.push(roleID);
             }
-            console.log("B", rolesArray);
+            // console.log("B", rolesArray);
             return rolesArray;
           },
           message: "Please select the employee's role.",
         },
       ])
       .then(function (answer) {
-        console.log("C", answer);
+        // console.log("C", answer);
         connection.query(
           "INSERT INTO employee SET ?",
           {
@@ -125,7 +125,7 @@ function addDepartment() {
       },
     ])
     .then(function (answer) {
-      console.log("C", answer.department);
+      // console.log("C", answer.department);
       connection.query(
         "INSERT INTO department SET ?",
         { name: answer.department },
@@ -139,7 +139,7 @@ function addDepartment() {
 }
 
 function addRole() {
-  console.log("1", "You've reached Role");
+  // console.log("1", "You've reached Role");
 
   inquirer
     .prompt([
@@ -161,7 +161,7 @@ function addRole() {
       },
     ])
     .then(function (answer) {
-      console.log("4", answer);
+      // console.log("4", answer);
       connection.query(
         "INSERT INTO role SET ?",
         {
@@ -195,17 +195,48 @@ function viewRole() {
 }
 
 function updateEmployeeRole() {
-  // connection.query("SELECT * FROM role", function (err, results) {
-  //   if (err) throw err;
-  //   console.table(results);
-  // });
-  start();
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "firstName",
+        message: "What's the employee's first name?",
+      },
+      {
+        type: "input",
+        name: "lasttName",
+        message: "What's the employee's last name?",
+      },
+      {
+        type: "input",
+        name: "roleId",
+        message: "What's the employee's new role id?",
+      },
+    ])
+    .then(function (answer) {
+      // console.log("ZZ", answer);
+      let first_name = answer.firstName;
+      let last_name = answer.lasttName;
+      let role_id = answer.roleId;
+      let manager_id = answer.managerID;
+      let query =
+        "INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUE(?,?,?,?)";
+      connection.query(
+        query,
+        [first_name, last_name, role_id, manager_id],
+        function (err) {
+          if (err) throw err;
+          console.log("C", "Employee role was successfully updated!");
+          start();
+        }
+      );
+    });
 }
 
 function deptID() {
   connection.query("SELECT id, name FROM department", function (err, results) {
-    console.log("Made it to depID");
-    console.log("S", results);
+    // console.log("Made it to depID");
+    // console.log("S", results);
     if (err) throw err;
     for (let i = 0; i < results.length; i++) {
       (deptID = {
@@ -213,7 +244,7 @@ function deptID() {
         value: results[i].id,
       }),
         deptIDArray.push(deptID);
-      console.log("T", deptID);
+      // console.log("T", deptID);
     }
   });
 }
